@@ -43,4 +43,12 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+db.notes = require('./Notes')(sequelize, Sequelize.DataTypes);
+db.users = require('./Users')(sequelize, Sequelize.DataTypes);
+
+db.sequelize.sync({ force: false})
+.then(() => {
+  console.log('re-sync done!');
+});
+
 module.exports = db;

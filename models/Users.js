@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Notes = sequelize.define(
-    "Notes",
+  const Users = sequelize.define(
+    "Users",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -8,21 +8,13 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         allowNull: false,
       },
-      title: {
+      username: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
-      description: {
-        type: DataTypes.TEXT,
-      },
-      ingredients: {
-        type: DataTypes.TEXT('long'),
-      },
-      steps: {
-        type: DataTypes.TEXT('long'),
-      },
-      img_url: {
+      password: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -34,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
-      tableName: "notes",
+      tableName: "users",
     }
   );
-  return Notes;
+  return Users;
 };
