@@ -3,10 +3,12 @@ var router = express.Router();
 const Validator = require("fastest-validator");
 const v = new Validator();
 const db = require("../models");
+const User = db.users;
+const Note = db.notes;
 
 // GET
 router.get("/", async (req, res, next) => {
-  const notes = await db.notes.findAll();
+  const notes = await Note.findAll();
   return res.json({
     status: 200,
     message: "Success get all data",
@@ -14,11 +16,27 @@ router.get("/", async (req, res, next) => {
   });
 });
 
+// GET User's Notes
+/*router.get("/user/:id", async (req, res, next) => {
+  const notes = await Note.findAll({
+    include: [{
+      model: User,
+      as: 'user'
+    }],
+    where: { id: req.params.id }
+  });
+  return res.json({
+    status: 200,
+    message: "Success get all data",
+    data: notes,
+  });
+});*/
+
 // GET DATA BY ID
 router.get("/:id", async (req, res, next) => {
   const id = req.params.id;
   // check id in table note
-  let note = await db.notes.findByPk(id);
+  let note = await Note.findByPk(id);
   if (!note) {
     return res.status(404).json({ status: 404, message: "Data not found" });
   } else {
@@ -40,7 +58,7 @@ router.post("/", async (req, res, next) => {
     return res.status(400).json(validate);
   }
   // proses create
-  const note = await db.notes.create(req.body);
+  const note = await Note.create(req.body);
   res.json({
     status: 200,
     message: "Success create data",
@@ -51,7 +69,7 @@ router.post("/", async (req, res, next) => {
 // PUT
 router.put("/:id", async (req, res, next) => {
   const id = req.params.id;
-  let note = await db.notes.findByPk(id);
+  let note = await Note.findByPk(id);
   if (!note) {
     return res.status(404).json({ status: 404, message: "Data not found" });
   }
@@ -79,7 +97,7 @@ router.put("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   const id = req.params.id;
   // check id in table note
-  let note = await db.notes.findByPk(id);
+  let note = await Note.findByPk(id);
   if (!note) {
     return res.status(404).json({ status: 404, message: "Data not found" });
   }
