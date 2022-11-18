@@ -4,6 +4,7 @@ const prisma = require('../prisma');
 const User = prisma.user;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { serialize } = require('cookie')
 
 const register = async (req, res) => {
     const username = req.body.username;
@@ -44,6 +45,7 @@ const login = async (req, res) => {
   let user = await User.findMany({
     where: { username: String(username) }
   });
+  if (user.length === 0) console.log(user);;
   if (user.length === 0) return res.status(404).json("User not found!");
 
   // Check password
@@ -55,12 +57,24 @@ const login = async (req, res) => {
   if (!isPasswordCorrect)
     return res.status(400).json("Wrong username or password!");
 
-  const token = jwt.sign({ id: user[0].id }, "jwtkey");
+  const maxAge = 3 * 24 * 60 * 60;
+  const token = jwt.sign({ id: user[0].id }, "jwtkey", {expiresIn: maxAge});
   const { password, ...other } = user[0];
 
-  res.cookie("access_token", token, {
-      httpOnly: true,
-    }).status(200).json(other);
+  const serialised = serialize("OursiteJWT", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development",
+    sameSite: "strict",
+    maxAge: 60 * 60 * 24 * 30,
+    path: "/",
+  });
+
+  res.setHeader("Set-Cookie", serialised);
+
+  // res.cookie("access_token", token, {
+  //     httpOnly: true,
+  //   }).status(200).json(other);
+  res.status(200).json(other);
 }
 
 const logout = (req, res) => {

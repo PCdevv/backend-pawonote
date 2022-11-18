@@ -1,8 +1,9 @@
 const Validator = require("fastest-validator");
 const v = new Validator();
 const prisma = require('../prisma')
-// const User = prisma.users;
+const User = prisma.users;
 const Note = prisma.note;
+const jwt = require('jsonwebtoken');
 
 const getNotes = async (req, res, next) => {
     const notes = await Note.findMany({
@@ -31,13 +32,27 @@ const getNote = async (req, res, next) => {
   }
 
 const createNote = async (req, res, next) => {
+    const token = req.headers.authorization.split(' ')[1]
+    if (!token) {
+      res.status(200).json({ message: 'Error, token not provided.' })
+    }
+    const decodedToken = jwt.verify(token, "jwtkey")
+    // const id = decodedToken.id
+    const user = await prisma.user.findMany({
+      where: { id: Number(decodedToken.id) }
+    });
+    // console.log(user);
+    // res.status(200).json({
+    //   message: 'Token verified!',
+    //   data:{id: decodedToken.id }
+    // })
+
     // validation
     const schema = {
       title: "string",
       description: "string|optional",
       ingredients: "string",
       steps: "string",
-      writerId: "number",
     };
     const validate = v.validate(req.body, schema);
     if (validate.length) {
@@ -51,12 +66,13 @@ const createNote = async (req, res, next) => {
         ingredients: req.body.ingredients,
         steps: req.body.steps,
         steps: req.body.steps,
-        writerId: req.body.writerId,
+        writerId: decodedToken.id,
       }
     });
+    // console.log(note);
     res.json({
       status: 200,
-      message: "Success create data",
+      message: "Token verified! Success create data",
       data: note,
     });
   }

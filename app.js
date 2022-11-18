@@ -17,15 +17,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 // app.options("*", cors({
-//     origin: 'http://127.0.0.1:5000',
+//     origin: 'http://127.0.0.1:3000',
 //     optionsSuccessStatus: 200
 // }))
-// app.use(
-//     cors({
-//         origin: 'http://127.0.0.1:5000',
-//         optionsSuccessStatus: 200
-//     })
-// )
+app.use(
+    cors({
+        origin: 'http://localhost:3000',
+        optionsSuccessStatus: 200
+    })
+)
 // app.use(basicAuth({
 //     users: {
 //         'admin': 'supersecret',
@@ -46,9 +46,9 @@ var usersRouter = require("./routes/users");
 var notesRouter = require("./routes/notes");
 var authRouter = require("./routes/auth");
 
-app.use("/", indexRouter);
-app.use("/users", usersRouter);
-app.use("/notes", notesRouter);
-app.use("/auth", authRouter);
+app.use("/api", indexRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/notes", notesRouter);
+app.use("/api/auth", authRouter);
 
 module.exports = app;
