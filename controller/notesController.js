@@ -32,20 +32,16 @@ const getNote = async (req, res, next) => {
   }
 
 const createNote = async (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1]
+    const token = req.body.token
     if (!token) {
       res.status(200).json({ message: 'Error, token not provided.' })
     }
     const decodedToken = jwt.verify(token, "jwtkey")
     // const id = decodedToken.id
-    const user = await prisma.user.findMany({
+    let user = await prisma.user.findMany({
       where: { id: Number(decodedToken.id) }
     });
-    // console.log(user);
-    // res.status(200).json({
-    //   message: 'Token verified!',
-    //   data:{id: decodedToken.id }
-    // })
+    const username = user[0].username;
 
     // validation
     const schema = {
@@ -74,6 +70,8 @@ const createNote = async (req, res, next) => {
       status: 200,
       message: "Token verified! Success create data",
       data: note,
+      writer: username,
+      token: token,
     });
   }
 

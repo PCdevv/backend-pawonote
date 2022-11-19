@@ -59,22 +59,16 @@ const login = async (req, res) => {
 
   const maxAge = 3 * 24 * 60 * 60;
   const token = jwt.sign({ id: user[0].id }, "jwtkey", {expiresIn: maxAge});
-  const { password, ...other } = user[0];
+  const { password, ...data } = user[0];
 
-  const serialised = serialize("OursiteJWT", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV !== "development",
-    sameSite: "strict",
-    maxAge: 60 * 60 * 24 * 30,
-    path: "/",
-  });
-
-  res.setHeader("Set-Cookie", serialised);
-
-  // res.cookie("access_token", token, {
-  //     httpOnly: true,
-  //   }).status(200).json(other);
-  res.status(200).json(other);
+  // const serialised = serialize("auth", token, {
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV !== "development",
+  //   sameSite: "none",
+  //   maxAge: maxAge,
+  //   path: "/",
+  // });
+  res.status(200).json({ data, token });
 }
 
 const logout = (req, res) => {
