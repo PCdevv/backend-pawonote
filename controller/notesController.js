@@ -49,6 +49,7 @@ const createNote = async (req, res, next) => {
       description: "string|optional",
       ingredients: "string",
       steps: "string",
+      // img_url: "object",
     };
     const validate = v.validate(req.body, schema);
     if (validate.length) {
@@ -61,11 +62,13 @@ const createNote = async (req, res, next) => {
         description: req.body.description,
         ingredients: req.body.ingredients,
         steps: req.body.steps,
-        steps: req.body.steps,
+        img_url: req.file.path,
         writerId: decodedToken.id,
       }
     });
     // console.log(note);
+    // const img = req.file
+    // console.log(typeof img);
     res.json({
       status: 200,
       message: "Token verified! Success create data",
