@@ -19,6 +19,10 @@ CREATE TABLE `Notes` (
     `img_url` VARCHAR(255) NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
+    `writerId` INTEGER NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `Notes` ADD CONSTRAINT `Notes_writerId_fkey` FOREIGN KEY (`writerId`) REFERENCES `Users`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

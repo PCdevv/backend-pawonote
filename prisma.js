@@ -1,11 +1,11 @@
 const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient({ log: ['query'] })
-// export const prisma =
+// const prisma =
 //   global.prisma ||
 //   new PrismaClient({
 //     log: ['query'],
-//   })
+  // })
 
 async function main() {
 //   const allUsers = await prisma.user.findMany()

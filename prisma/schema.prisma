@@ -27,7 +27,7 @@ model Note {
   img_url     String?  @db.VarChar(255)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  writer      User     @relation(fields: [writerId], references: [id])
+  writer      User     @relation(fields: [writerId], references: [id], onDelete: Cascade)
   writerId    Int
 
   @@map("Notes")

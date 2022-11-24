@@ -62,7 +62,7 @@ const createNote = async (req, res, next) => {
         description: req.body.description,
         ingredients: req.body.ingredients,
         steps: req.body.steps,
-        img_url: req.file.path,
+        // img_url: req.file.path,
         writerId: decodedToken.id,
       }
     });

@@ -11,4 +11,10 @@ router.get("/:id", users.getUser);
 // POST
 // router.post("/", users.createUser);
 
+// PUT
+router.put("/:id", users.updateUser);
+
+// DELETE
+router.delete("/:id", users.deleteUser);
+
 module.exports = router;

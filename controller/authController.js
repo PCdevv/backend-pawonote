@@ -19,7 +19,7 @@ const register = async (req, res) => {
   // validation
   const schema = {
     username: "string",
-    password: "string|optional",
+    password: "string",
   };
   const validate = v.validate(req.body, schema);
   if (validate.length) {
